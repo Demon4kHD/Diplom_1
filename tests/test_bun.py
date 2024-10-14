@@ -1,14 +1,25 @@
 import pytest
+
 from praktikum.bun import Bun
 
 
 class TestsBun:
+    def test_get_name_true(self, create_bun):
+        name, price,  bun = create_bun
+        current_name = bun.get_name()
+        assert current_name == name
 
-    @pytest.mark.parametrize('name, price', [
-        ('zero-calories bun', 12.60), ('high-calories bun', 300.0000000), ('salty bun', 100500.00)
-    ])
-    def test_create_new_bun_true(self, name, price):
-        self.bun = Bun(name, price)
+    def test_get_price_true(self, create_bun):
+        name, price, bun = create_bun
+        current_price = bun.get_price()
+        assert current_price == price
 
-        assert self.bun.get_name() == name
-        assert self.bun.get_price() == price
+    @pytest.mark.parametrize('name, price', [('salty bun', 150), ('sugar bun', 350)])
+    def test_create_self_bun_true(self, name, price):
+        bun = Bun(name, price)
+        current_name = bun.get_name()
+        current_price = bun.get_price()
+
+        assert current_name == name
+        assert current_price == price
+
