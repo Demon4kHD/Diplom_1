@@ -34,10 +34,36 @@ def create_burger():
     burger = Burger()
     return burger
 
-@pytest.fixture()
+@pytest.fixture
 def set_bun_in_order(create_burger):
     burger = create_burger
-    bun = Bun(DATA_BUNS['names'][0], DATA_BUNS['prices'][0])
+    name = random.choice(DATA_BUNS['names'])
+    price = random.choice(DATA_BUNS['prices'])
+    bun = Bun(name, price)
     burger.set_buns(bun)
-    price = burger.get_price()
-    return burger, price
+    return burger, price, name
+
+@pytest.fixture
+def add_ingredient_and_bun_for_test(set_bun_in_order, create_ingredient):
+    burger, bun_price, bun_name = set_bun_in_order
+    ingredient_type, ingredient_name, ingredient_price, ingredient = create_ingredient
+    burger.add_ingredient(ingredient)
+    return burger, bun_price, bun_name, ingredient_type, ingredient_name, ingredient_price, ingredient
+
+@pytest.fixture
+def add_two_ingredient_and_one_bun_for_test(set_bun_in_order):
+    burger, bun_price, bun_name = set_bun_in_order
+    first_ingredient_type = DATA_INGREDIENTS['types'][3]
+    first_ingredient_name = DATA_INGREDIENTS['names'][3]
+    first_ingredient_price = DATA_INGREDIENTS['prices'][3]
+    first_ingredient = Ingredient(first_ingredient_type, first_ingredient_name, first_ingredient_price)
+    burger.add_ingredient(first_ingredient)
+    second_ingredient_type = DATA_INGREDIENTS['types'][0]
+    second_ingredient_name = DATA_INGREDIENTS['names'][0]
+    second_ingredient_price = DATA_INGREDIENTS['prices'][0]
+    second_ingredient = Ingredient(second_ingredient_type, second_ingredient_name, second_ingredient_price)
+    burger.add_ingredient(second_ingredient)
+    return (burger, bun_price, bun_name, first_ingredient_type,
+            first_ingredient_name, first_ingredient_price, first_ingredient,
+            second_ingredient_type, second_ingredient_name, second_ingredient_price,
+            second_ingredient)
